@@ -14,7 +14,7 @@ Before jumping in, try accessing the links below to make sure you have access to
 ### Deploy  to Bluemix
 First, let's get this app up and running on Bluemix. This will provide us with a publicly accessible endpoint that we can register with Watson Work Services to get events pushed to. To deploy to Bluemix, you can simply click the button below. This will create your own [Bluemix DevOps toolchain](https://console.bluemix.net/devops/getting-started?env_id=ibm:yp:us-south) in addition to deploying the app. As part of the toolchain, Bluemix will create a git-based repository for source control and a pipeline for building, testing and deployment.
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/watsonwork/watsonwork-github-issues)
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/yyc0309/watsonwork-github-issues)
 
 Once you've clicked the button, you'll get prompted with the following screens:
 
