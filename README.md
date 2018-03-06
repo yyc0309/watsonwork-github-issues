@@ -1,7 +1,7 @@
 # Github Extension 03/05/18
 This bot is able to list issues tagged with a particular milestone.
 In addition to original set-up steps, you need to:
-1) Create a personal Github access token via user `Settings -> Developer settings -> Personal access tokens`
+1) Create a personal Github access token via `user Settings -> Developer settings -> Personal access tokens`
 2) Add this token to your runtime enviroment: `GITHUB_ACCESS_TOKEN` = `<access token>`
 
 Once app is up and running, you can type `@github <operation> <args>*`:
