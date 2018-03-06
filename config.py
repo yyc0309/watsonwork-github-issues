@@ -23,3 +23,9 @@ MESSAGE_COLOR = '#006600'
 
 # Send message title
 MESSAGE_TITLE = 'Echo test'
+
+GITHUB_TRIGGER = '@github'
+
+GITHUB_API_URL = 'https://api.github.com'
+
+GITHUB_ACCESS_TOKEN = os.getenv('GITHUB_ACCESS_TOKEN')

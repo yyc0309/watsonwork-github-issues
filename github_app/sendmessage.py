@@ -39,6 +39,10 @@ def sendSimpleMessage(spaceId, text):
   color = current_app.config.get('MESSAGE_COLOR')
   buildAndSend(spaceId, text, title, color)
 
+def sendSimpleMessageWithTitle(title, spaceId, text):
+  color = current_app.config.get('MESSAGE_COLOR')
+  buildAndSend(spaceId, text, title, color)
+
 # Call Send Message API to send message to Watson Work Services
 def sendMessage(spaceId, message):
   send_message_api = '%s/v1/spaces/%s/messages' % (

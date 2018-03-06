@@ -3,7 +3,8 @@ import hashlib
 import json
 
 from flask import current_app, request, Response, Blueprint
-from sendmessage import sendSimpleMessage
+from sendmessage import sendSimpleMessage, sendSimpleMessageWithTitle
+from github import callGithubApi
 
 # Define blueprint module
 webhooks = Blueprint('webhooks', __name__, url_prefix='/webhooks')
@@ -39,4 +40,9 @@ def parseMessage(body):
   splitContent = body['content'].split(' ')
   if current_app.config.get('WEBHOOK_TRIGGER') in splitContent:
     sendSimpleMessage(spaceId, ' '.join(splitContent[1:]))
+  elif current_app.config.get('GITHUB_TRIGGER') in splitContent:
+    title, msg = callGithubApi(spaceId, splitContent[1:])
+    print('title: %s, msg: %s' % (title, msg))
+    sendSimpleMessageWithTitle(title, spaceId, msg)
+
   return Response(status=200)
