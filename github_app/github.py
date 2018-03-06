@@ -62,7 +62,7 @@ def callGithubApi(spaceId, contentLst):
     return ['Failed', "Operation [%s] is not supported" % op]
 
   if len(contentLst[1:]) != ops[op][0]:
-    return ['Failed', "Operation %s requires %s additional arguments" % (op, ops[op])]
+    return ['Failed', "Operation %s requires %s more additional arguments" % (op, ops[op][0])]
 
   if ops[op][1] and (not isContextSet()):
     return ['Failed', "Context is not set yet"]
@@ -94,7 +94,7 @@ def callGithubApi(spaceId, contentLst):
 
     issues = r.json()
     
-    filteredIssues = "\\n".join(map(lambda x: "Title: %s, Assignee: %s" % (x['title'], x['assignee']), filter(lambda x: x['milestone']['title'] == milestone, issues)))
+    filteredIssues = "\n".join(map(lambda x: "Title: %s, Assignee: %s" % (x['title'], x['assignee']), filter(lambda x: x['milestone']['title'] == milestone, issues)))
 
     if filteredIssues:
       msg = filteredIssues
