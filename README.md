@@ -1,3 +1,14 @@
+# Github Extension 03/05/18
+This bot is able to list issues tagged with a particular milestone.
+In addition to original set-up steps, you need to:
+1) Create a personal Github access token via user `Settings -> Developer settings -> Personal access tokens`
+2) Add this token to your runtime enviroment: `GITHUB_ACCESS_TOKEN` = `<access token>`
+
+Once app is up and running, you can type `@github <operation> <args>*`:
+1) When operation is `set`, you need to provide the owner and name of repo as the `args`. Example, `@github set yyc0309 watsonwork-github-issues`
+2) When operation is `context`, you don't need to provide any arguments. Bot will respond back with the current context (owner, name of repo).
+3) When operation is `list`, you need to provide a milestone title. Example, `@github list new-feature`
+
 # Github Issues Sample
 This `watsonwork-github-issues` sample application showcases a variety of capabilities and easy-to-use features with Watson Work Services. In particular it shows authentication with Watson Work Services, posting a message to a Work Services space and integration with a third party service.
 
