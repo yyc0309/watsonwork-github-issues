@@ -94,7 +94,7 @@ def callGithubApi(spaceId, contentLst):
 
     issues = r.json()
     
-    filteredIssues = "\n".join(map(lambda x: "[#%s %s](%s)" % (x['number'], x['title'], x['url']), filter(lambda x: x['milestone']['title'] == milestone, issues)))
+    filteredIssues = "\n".join(map(lambda x: "[#%s %s](%s)" % (x['number'], x['title'], x['html_url']), filter(lambda x: x['milestone']['title'] == milestone, issues)))
 
     if filteredIssues:
       title = 'Issues tagged with %s' % milestone
