@@ -38,11 +38,11 @@ def parseMessage(body):
   current_app.logger.info('Parsing incoming message')
   spaceId = body['spaceId']
   splitContent = body['content'].split(' ')
-  if current_app.config.get('WEBHOOK_TRIGGER') in splitContent:
+  if current_app.config.get('WEBHOOK_TRIGGER') == splitContent[0]:
     sendSimpleMessage(spaceId, ' '.join(splitContent[1:]))
-  elif current_app.config.get('GITHUB_TRIGGER') in splitContent:
+  elif current_app.config.get('GITHUB_TRIGGER') == splitContent[0]:
     title, msg = callGithubApi(spaceId, splitContent[1:])
-    print('title: %s, msg: %s' % (title, msg))
+    #print('title: %s, msg: %s' % (title, msg))
     sendSimpleMessageWithTitle(title, spaceId, msg)
 
   return Response(status=200)
