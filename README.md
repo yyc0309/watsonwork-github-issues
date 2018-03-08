@@ -8,6 +8,7 @@ Once app is up and running, you can type `@github <operation> <args>*`:
 1) When operation is `set`, you need to provide the owner and name of repo as the `args`. Example, `@github set yyc0309 watsonwork-github-issues`
 2) When operation is `context`, you don't need to provide any arguments. Bot will respond back with the current context (owner, name of repo).
 3) When operation is `list`, you need to provide a milestone title. Example, `@github list new-feature`
+4) When operation is `create`, you need to provide an issue title and a milestone title. Example, `@github new-issue new-milestone`. If `new-milestone` doesn't exit, bot will create and attach it to `new-issue`.
 
 # Github Issues Sample
 This `watsonwork-github-issues` sample application showcases a variety of capabilities and easy-to-use features with Watson Work Services. In particular it shows authentication with Watson Work Services, posting a message to a Work Services space and integration with a third party service.
