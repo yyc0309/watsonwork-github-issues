@@ -46,9 +46,10 @@ def buildGithubMessage(spaceId, body):
 
 #----------------------Below are functions for calling github api and returning result to workspace via api call-------------------------
 ops = { # <operation>: (<expected num of args>, <needs context>)
-  'set': (2, False), 
-  'list': (1, True), 
-  'context': (0, True) 
+  'set': ([2], False), 
+  'list': ([1], True), 
+  'context': ([0], True),
+  'create': ([2], True) 
 } 
 
 # Return [<Title>, <Message>]
@@ -61,8 +62,8 @@ def callGithubApi(spaceId, contentLst):
   if op not in ops:
     return ['Failed', "Operation [%s] is not supported" % op]
 
-  if len(contentLst[1:]) != ops[op][0]:
-    return ['Failed', "Operation %s requires %s more additional arguments" % (op, ops[op][0])]
+  if len(contentLst[1:]) not in ops[op][0]:
+    return ['Failed', "Operation %s requires %s more additional arguments" % (op, '|'.join(ops[op][0]))]
 
   if ops[op][1] and (not isContextSet()):
     return ['Failed', "Context is not set yet"]
@@ -80,13 +81,9 @@ def callGithubApi(spaceId, contentLst):
     curRepo = current_app.config['GITHUB_REPO']
     msg = "Current context is [owner: %s] [repo: %s]" % (curOwner, curRepo)
   elif op == 'list':
-    curOwner = current_app.config['GITHUB_OWNER']
-    curRepo = current_app.config['GITHUB_REPO']
-    baseUrl = current_app.config['GITHUB_API_URL']
-    accessToken = "token %s" % current_app.config['GITHUB_ACCESS_TOKEN']
     milestone = contentLst[1]
+    curOwner, curRepo, baseUrl, headers = getGithubContext()
     url = '/'.join([baseUrl, 'repos', curOwner, curRepo, 'issues'])
-    headers = { 'Authorization': accessToken }
     r = requests.get(url, headers = headers)
 
     if r.status_code != 200:
@@ -102,7 +99,33 @@ def callGithubApi(spaceId, contentLst):
     else:
       title = 'Failed'
       msg = 'No issue is tagged with milestone: %s' % milestone
-  
+
+  elif op == 'create':
+    issueTitle = contentLst[1]
+    issueMilestone = contentLst[2]
+    curOwner, curRepo, baseUrl, headers = getGithubContext()
+    milestoneUrl = '/'.join([baseUrl, 'repos', curOwner, curRepo, 'milestones'])
+    milestonesResponse = requests.get(milestoneUrl, headers = headers)
+    if milestonesResponse != 200:
+      return ['Failed', 'Cannot get list of milestones']
+
+    code, milestoneNum = getMilestoneNumber(milestonesResponse.json(), issueMilestone, milestoneUrl, headers)
+    if code == 'bad':
+      return ['Failed', 'Cannot create milestone: %s' % issueMilestone]
+    
+    issueUrl = '/'.join([baseUrl, 'repos', curOwner, curRepo, 'issues'])
+    issuePayload = {'title': issueTitle, 'milestone': milestoneNum}
+    
+    r = requests.post(issueUrl, headers = headers, payload = issuePayload)
+    
+    if r.status_code != 201:
+      return ['Failed', 'Cannot create issue: %s' % issueTitle]
+
+    createdIssue = r.json()
+    title = "Issue created"
+    msg = "[#%s %s](%s)" % (createdIssue['number'], createdIssue['title'], createdIssue['html_url'])
+
+
   return [title, msg]
 
 
@@ -110,5 +133,18 @@ def callGithubApi(spaceId, contentLst):
 def isContextSet():
   return ('GITHUB_OWNER' in current_app.config) and ('GITHUB_REPO' in current_app.config)
 
+def getGithubContext():
+  return (current_app.config['GITHUB_OWNER'], current_app.config['GITHUB_REPO'], current_app.config['GITHUB_API_URL'], { 'Authorization': "token %s" % current_app.config['GITHUB_ACCESS_TOKEN'] })
+
+def getMilestoneNumber(data, milestone, url, headers):
+  targetMilestone = filter(lambda x: x['title'] == milestone, milestones_response.json())
+  if len(targetMilestone) == 0:
+    createMilestoneResponse = requests.post(url, headers = headers, payload = {'title': milestone})
+    if createMilestoneResponse.status_code != 201:
+      return ('bad', createMilestoneResponse.status_code)
+    else:
+      return ('ok', createMilestoneResponse.json()['number'])
+  else:
+    return ('ok', targetMilestone[0]['number'])
 
 
