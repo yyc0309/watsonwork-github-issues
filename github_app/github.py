@@ -106,7 +106,7 @@ def callGithubApi(spaceId, contentLst):
     curOwner, curRepo, baseUrl, headers = getGithubContext()
     milestoneUrl = '/'.join([baseUrl, 'repos', curOwner, curRepo, 'milestones'])
     milestonesResponse = requests.get(milestoneUrl, headers = headers)
-    if milestonesResponse != 200:
+    if milestonesResponse.status_code != 200:
       return ['Failed', 'Cannot get list of milestones']
 
     code, milestoneNum = getMilestoneNumber(milestonesResponse.json(), issueMilestone, milestoneUrl, headers)
