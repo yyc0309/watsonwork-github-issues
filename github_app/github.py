@@ -116,7 +116,7 @@ def callGithubApi(spaceId, contentLst):
     issueUrl = '/'.join([baseUrl, 'repos', curOwner, curRepo, 'issues'])
     issuePayload = {'title': issueTitle, 'milestone': milestoneNum}
     
-    r = requests.post(issueUrl, headers = headers, payload = issuePayload)
+    r = requests.post(issueUrl, headers = headers, data = issuePayload)
     
     if r.status_code != 201:
       return ['Failed', 'Cannot create issue: %s' % issueTitle]
@@ -139,7 +139,7 @@ def getGithubContext():
 def getMilestoneNumber(data, milestone, url, headers):
   targetMilestone = filter(lambda x: x['title'] == milestone, data)
   if len(targetMilestone) == 0:
-    createMilestoneResponse = requests.post(url, headers = headers, payload = {'title': milestone})
+    createMilestoneResponse = requests.post(url, headers = headers, data = {'title': milestone})
     if createMilestoneResponse.status_code != 201:
       return ('bad', createMilestoneResponse.status_code)
     else:
