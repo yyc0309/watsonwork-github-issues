@@ -137,7 +137,7 @@ def getGithubContext():
   return (current_app.config['GITHUB_OWNER'], current_app.config['GITHUB_REPO'], current_app.config['GITHUB_API_URL'], { 'Authorization': "token %s" % current_app.config['GITHUB_ACCESS_TOKEN'] })
 
 def getMilestoneNumber(data, milestone, url, headers):
-  targetMilestone = filter(lambda x: x['title'] == milestone, milestones_response.json())
+  targetMilestone = filter(lambda x: x['title'] == milestone, data)
   if len(targetMilestone) == 0:
     createMilestoneResponse = requests.post(url, headers = headers, payload = {'title': milestone})
     if createMilestoneResponse.status_code != 201:
