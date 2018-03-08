@@ -63,7 +63,7 @@ def callGithubApi(spaceId, contentLst):
     return ['Failed', "Operation [%s] is not supported" % op]
 
   if len(contentLst[1:]) not in ops[op][0]:
-    return ['Failed', "Operation %s requires %s more additional arguments" % (op, '|'.join(ops[op][0]))]
+    return ['Failed', "Operation %s requires %s more additional arguments" % (op, '|'.join(map(lambda x: str(x), ops[op][0])))]
 
   if ops[op][1] and (not isContextSet()):
     return ['Failed', "Context is not set yet"]
